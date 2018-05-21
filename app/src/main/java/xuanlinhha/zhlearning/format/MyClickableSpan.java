@@ -1,6 +1,5 @@
 package xuanlinhha.zhlearning.format;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.Observer;
@@ -19,8 +18,6 @@ import xuanlinhha.zhlearning.R;
 import xuanlinhha.zhlearning.db.DB;
 import xuanlinhha.zhlearning.json.MeaningJson;
 import xuanlinhha.zhlearning.model.Meaning;
-
-import static xuanlinhha.zhlearning.R.color.colorBlue;
 
 /**
  * Created by xuanlinhha on 20/5/18.
