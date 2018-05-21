@@ -1,10 +1,13 @@
 package xuanlinhha.zhlearning.format;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.view.View;
@@ -16,6 +19,8 @@ import xuanlinhha.zhlearning.R;
 import xuanlinhha.zhlearning.db.DB;
 import xuanlinhha.zhlearning.json.MeaningJson;
 import xuanlinhha.zhlearning.model.Meaning;
+
+import static xuanlinhha.zhlearning.R.color.colorBlue;
 
 /**
  * Created by xuanlinhha on 20/5/18.
@@ -58,5 +63,10 @@ public class MyClickableSpan extends ClickableSpan {
                 }
             }
         });
+    }
+
+    @Override
+    public void updateDrawState(TextPaint ds) {
+        ds.setColor(Color.BLUE);
     }
 }
