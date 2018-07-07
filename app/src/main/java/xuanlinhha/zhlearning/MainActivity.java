@@ -217,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
                     db.savedItemDao().insertSavedItem(new SavedItem(han));
                     return null;
                 }
+
                 @Override
                 protected void onPostExecute(Void aVoid) {
                     Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_LONG).show();
@@ -235,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
                     db.savedItemDao().delete(new SavedItem(han));
                     return null;
                 }
+
                 @Override
                 protected void onPostExecute(Void aVoid) {
                     Toast.makeText(getApplicationContext(), "Deleted!", Toast.LENGTH_LONG).show();
@@ -244,9 +246,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void listHandler() {
-        db.savedItemDao().getSavedItems().observe(this, new Observer<List<SavedItem>>() {
+        new AsyncTask<Void, Void, Void>() {
             @Override
-            public void onChanged(@Nullable List<SavedItem> savedItems) {
+            protected Void doInBackground(Void... voids) {
+                List<SavedItem> savedItems = db.savedItemDao().getSavedItems();
                 if (!savedItems.isEmpty()) {
                     Collections.sort(savedItems, new Comparator<SavedItem>() {
                         @Override
@@ -258,10 +261,17 @@ public class MainActivity extends AppCompatActivity {
                     for (SavedItem item : savedItems) {
                         sb.append(item.getHan());
                     }
-                    editText.setText(sb.toString());
+                    setText(editText, sb.toString());
                 }
+                return null;
             }
-        });
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                Toast.makeText(getApplicationContext(), "Loaded!", Toast.LENGTH_LONG).show();
+            }
+        }.execute();
+
     }
 
     private void resetHandler() {
@@ -296,6 +306,15 @@ public class MainActivity extends AppCompatActivity {
                         textContainer.addView(tv);
                     }
                 }
+            }
+        });
+    }
+
+    private void setText(final TextView text, final String value) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                text.setText(value);
             }
         });
     }

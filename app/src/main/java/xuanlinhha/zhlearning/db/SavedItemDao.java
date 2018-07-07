@@ -17,9 +17,9 @@ import xuanlinhha.zhlearning.model.SavedItem;
 @Dao
 public interface SavedItemDao {
     @Query("SELECT * FROM SavedItem")
-    public LiveData<List<SavedItem>> getSavedItems();
+    public List<SavedItem> getSavedItems();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     public void insertSavedItem(SavedItem savedItem);
 
     @Delete

@@ -34,6 +34,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_below="@id/editText"
+                android:layout_marginRight="30dp"
                 android:layout_toLeftOf="@+id/goButton"
                 android:background="@drawable/add" />
 
@@ -43,6 +44,7 @@
                 android:layout_height="35dp"
                 android:layout_below="@id/editText"
                 android:layout_toLeftOf="@+id/webView"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/play" />
 
             <ImageButton
@@ -51,6 +53,7 @@
                 android:layout_height="35dp"
                 android:layout_below="@id/editText"
                 android:layout_toRightOf="@+id/webView"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/replay" />
 
             <ImageButton
@@ -58,12 +61,9 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_below="@+id/editText"
+                android:layout_marginLeft="30dp"
                 android:layout_toRightOf="@+id/replayButton"
                 android:background="@drawable/minus" />
-
-
-
-
 
             <WebView
                 android:id="@+id/webView"
@@ -79,10 +79,9 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_alignBottom="@+id/webView"
+                android:layout_marginRight="30dp"
                 android:layout_toLeftOf="@+id/prevButton"
                 android:background="@drawable/list" />
-
-
 
             <ImageButton
                 android:id="@+id/prevButton"
@@ -90,6 +89,7 @@
                 android:layout_height="35dp"
                 android:layout_alignBottom="@+id/webView"
                 android:layout_toLeftOf="@+id/webView"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/left" />
 
             <ImageButton
@@ -98,16 +98,17 @@
                 android:layout_height="35dp"
                 android:layout_alignBottom="@+id/webView"
                 android:layout_toRightOf="@+id/webView"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/right" />
+
             <ImageButton
                 android:id="@+id/resetButton"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_alignBottom="@+id/webView"
+                android:layout_marginLeft="30dp"
                 android:layout_toRightOf="@+id/nextButton"
                 android:background="@drawable/reset" />
-
-
 
             <ScrollView
                 android:layout_width="wrap_content"
@@ -122,10 +123,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
-
             </ScrollView>
         </RelativeLayout>
-
-
     </ScrollView>
 </RelativeLayout>
