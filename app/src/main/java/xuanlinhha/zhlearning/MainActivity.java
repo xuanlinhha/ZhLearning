@@ -3,35 +3,46 @@ package xuanlinhha.zhlearning;
 import android.arch.lifecycle.Observer;
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
+import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import xuanlinhha.zhlearning.db.DB;
 import xuanlinhha.zhlearning.db.DBInitializer;
 import xuanlinhha.zhlearning.format.Formatter;
 import xuanlinhha.zhlearning.model.CC;
+import xuanlinhha.zhlearning.model.SavedItem;
 
 public class MainActivity extends AppCompatActivity {
     final Context context = this;
     private DB db;
     private EditText editText;
-    private Button goButton;
-    private Button replayButton;
+    private ImageButton goButton;
+    private ImageButton replayButton;
     private WebView webView;
-    private Button prevButton;
-    private Button nextButton;
+    private ImageButton prevButton;
+    private ImageButton nextButton;
+    private ImageButton addButton;
+    private ImageButton deleteButton;
+    private ImageButton listButton;
+    private ImageButton resetButton;
     private LinearLayout textContainer;
     private int position = 0;
     private CC curCC;
@@ -56,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
         webView = findViewById(R.id.webView);
         prevButton = findViewById(R.id.prevButton);
         nextButton = findViewById(R.id.nextButton);
+        addButton = findViewById(R.id.addButton);
+        deleteButton = findViewById(R.id.deleteButton);
+        listButton = findViewById(R.id.listButton);
+        resetButton = findViewById(R.id.resetButton);
         textContainer = findViewById(R.id.container);
 
         // listeners
@@ -83,10 +98,37 @@ public class MainActivity extends AppCompatActivity {
                 nextHandler();
             }
         });
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addHandler();
+            }
+        });
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteHandler();
+            }
+        });
+        listButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listHandler();
+            }
+        });
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetHandler();
+            }
+        });
 
     }
 
     private void goHandler() {
+        if (TextUtils.isEmpty(editText.getText())) {
+            return;
+        }
         // reset old position
         StyleSpan[] ss = editText.getText().getSpans(position, position + 1, StyleSpan.class);
         for (int i = 0; i < ss.length; i++) {
@@ -119,6 +161,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void nextHandler() {
+        if (TextUtils.isEmpty(editText.getText())) {
+            return;
+        }
         // reset old position
         StyleSpan[] ss = editText.getText().getSpans(position, position + 1, StyleSpan.class);
         for (int i = 0; i < ss.length; i++) {
@@ -139,6 +184,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void prevHandler() {
+        if (TextUtils.isEmpty(editText.getText())) {
+            return;
+        }
         // reset old position
         StyleSpan[] ss = editText.getText().getSpans(position, position + 1, StyleSpan.class);
         for (int i = 0; i < ss.length; i++) {
@@ -157,6 +205,78 @@ public class MainActivity extends AppCompatActivity {
         // load data based on code point
         String han = String.valueOf(editText.getText().charAt(position));
         loadData(han);
+    }
+
+    private void addHandler() {
+        position = editText.getSelectionStart();
+        final String han = (position < editText.getText().length()) ? String.valueOf(editText.getText().charAt(position)) : "";
+        if (!TextUtils.isEmpty(han)) {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    db.savedItemDao().insertSavedItem(new SavedItem(han));
+                    return null;
+                }
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_LONG).show();
+                }
+            }.execute();
+        }
+    }
+
+    private void deleteHandler() {
+        position = editText.getSelectionStart();
+        final String han = (position < editText.getText().length()) ? String.valueOf(editText.getText().charAt(position)) : "";
+        if (!TextUtils.isEmpty(han)) {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    db.savedItemDao().delete(new SavedItem(han));
+                    return null;
+                }
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    Toast.makeText(getApplicationContext(), "Deleted!", Toast.LENGTH_LONG).show();
+                }
+            }.execute();
+        }
+    }
+
+    private void listHandler() {
+        db.savedItemDao().getSavedItems().observe(this, new Observer<List<SavedItem>>() {
+            @Override
+            public void onChanged(@Nullable List<SavedItem> savedItems) {
+                if (!savedItems.isEmpty()) {
+                    Collections.sort(savedItems, new Comparator<SavedItem>() {
+                        @Override
+                        public int compare(SavedItem i1, SavedItem i2) {
+                            return i1.getHan().compareTo(i2.getHan());
+                        }
+                    });
+                    StringBuilder sb = new StringBuilder();
+                    for (SavedItem item : savedItems) {
+                        sb.append(item.getHan());
+                    }
+                    editText.setText(sb.toString());
+                }
+            }
+        });
+    }
+
+    private void resetHandler() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                db.savedItemDao().deleteAll();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                Toast.makeText(getApplicationContext(), "Reset!", Toast.LENGTH_LONG).show();
+            }
+        }.execute();
     }
 
     private void loadData(String han) {
