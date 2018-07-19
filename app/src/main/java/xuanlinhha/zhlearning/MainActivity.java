@@ -366,5 +366,7 @@ public class MainActivity extends AppCompatActivity {
         move(20);
     }
 
-
+    public void onEraseClicked(View view) {
+        editText.setText("");
+    }
 }

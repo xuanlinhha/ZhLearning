@@ -106,24 +106,23 @@
                 android:layout_toRightOf="@+id/webView"
                 android:background="@drawable/replay" />
 
-            <!--<ImageButton-->
-            <!--android:id="@+id/offButton"-->
-            <!--android:layout_width="25dp"-->
-            <!--android:layout_height="25dp"-->
-            <!--android:layout_below="@+id/deleteButton"-->
-            <!--android:layout_marginTop="5dp"-->
-            <!--android:layout_marginLeft="30dp"-->
-            <!--android:layout_toRightOf="@+id/replayButton"-->
-            <!--android:background="@drawable/off" />-->
+            <ImageButton
+                android:id="@+id/eraseButton"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_below="@+id/deleteButton"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/replayButton"
+                android:background="@drawable/erase"
+                android:onClick="onEraseClicked" />
 
             <WebView
                 android:id="@+id/webView"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_below="@id/editText"
-                android:layout_centerHorizontal="true">
-
-            </WebView>
+                android:layout_centerHorizontal="true" />
 
             <ImageButton
                 android:id="@+id/listButton"
