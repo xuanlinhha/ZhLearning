@@ -3,6 +3,7 @@ package xuanlinhha.zhlearning;
 import android.arch.lifecycle.Observer;
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.inputmethodservice.InputMethodService;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,9 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.BaseInputConnection;
+import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -46,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout textContainer;
     private int position = 0;
     private CC curCC;
+    private Boolean kbEnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,50 +168,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void nextHandler() {
-        if (TextUtils.isEmpty(editText.getText())) {
-            return;
-        }
-        // reset old position
-        StyleSpan[] ss = editText.getText().getSpans(position, position + 1, StyleSpan.class);
-        for (int i = 0; i < ss.length; i++) {
-            if (ss[i].getStyle() == android.graphics.Typeface.BOLD) {
-                editText.getText().removeSpan(ss[i]);
-            }
-        }
-
-        // increase cursor by 1 and bold
-        int currentPos = editText.getSelectionStart();
-        position = (currentPos + 1) % editText.getText().length();
-        editText.setSelection(position);
-        editText.getText().setSpan(new StyleSpan(android.graphics.Typeface.BOLD), position, position + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        // load data based on code point
-        String han = String.valueOf(editText.getText().charAt(position));
-        loadData(han);
+        move(1);
     }
 
     private void prevHandler() {
-        if (TextUtils.isEmpty(editText.getText())) {
-            return;
-        }
-        // reset old position
-        StyleSpan[] ss = editText.getText().getSpans(position, position + 1, StyleSpan.class);
-        for (int i = 0; i < ss.length; i++) {
-            if (ss[i].getStyle() == android.graphics.Typeface.BOLD) {
-                editText.getText().removeSpan(ss[i]);
-            }
-        }
-
-        // decrease cursor by 1 and bold
-        int currentPos = editText.getSelectionStart();
-        position = (currentPos - 1) % editText.getText().length();
-        if (position < 0) position += editText.getText().length();
-        editText.setSelection(position);
-        editText.getText().setSpan(new StyleSpan(android.graphics.Typeface.BOLD), position, position + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        // load data based on code point
-        String han = String.valueOf(editText.getText().charAt(position));
-        loadData(han);
+        move(-1);
     }
 
     private void addHandler() {
@@ -271,7 +239,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Loaded!", Toast.LENGTH_LONG).show();
             }
         }.execute();
-
     }
 
     private void resetHandler() {
@@ -287,6 +254,30 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Reset!", Toast.LENGTH_LONG).show();
             }
         }.execute();
+    }
+
+    private void move(int step) {
+        if (TextUtils.isEmpty(editText.getText())) {
+            return;
+        }
+        // reset old position
+        StyleSpan[] ss = editText.getText().getSpans(position, position + 1, StyleSpan.class);
+        for (int i = 0; i < ss.length; i++) {
+            if (ss[i].getStyle() == android.graphics.Typeface.BOLD) {
+                editText.getText().removeSpan(ss[i]);
+            }
+        }
+
+        // update position
+        int currentPos = editText.getSelectionStart();
+        position = (currentPos + step) % editText.getText().length();
+        if (position < 0) position += editText.getText().length();
+        editText.setSelection(position);
+        editText.getText().setSpan(new StyleSpan(android.graphics.Typeface.BOLD), position, position + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // load new character
+        String han = String.valueOf(editText.getText().charAt(position));
+        loadData(han);
     }
 
     private void loadData(String han) {
@@ -323,4 +314,45 @@ public class MainActivity extends AppCompatActivity {
         File dbFile = this.getDatabasePath(DB.DATABASE_NAME);
         return dbFile.exists();
     }
+
+    public void onCheckboxClicked(View view) {
+        this.kbEnable = ((CheckBox) view).isChecked();
+        if (this.kbEnable) {
+            editText.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    v.onTouchEvent(event);
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 1);
+                    }
+                    return true;
+                }
+            });
+        } else {
+            editText.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    v.onTouchEvent(event);
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    }
+                    return true;
+                }
+            });
+        }
+
+
+    }
+
+    public void onUp(View view) {
+        move(-20);
+    }
+
+    public void onDown(View view) {
+        move(20);
+    }
+
+
 }

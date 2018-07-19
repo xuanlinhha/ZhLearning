@@ -31,39 +31,90 @@
 
             <ImageButton
                 android:id="@+id/addButton"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_below="@id/editText"
                 android:layout_marginRight="30dp"
-                android:layout_toLeftOf="@+id/goButton"
+                android:layout_toLeftOf="@+id/upButton"
                 android:background="@drawable/add" />
 
             <ImageButton
-                android:id="@+id/goButton"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:id="@+id/upButton"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_below="@id/editText"
-                android:layout_toLeftOf="@+id/webView"
                 android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/webView"
+                android:background="@drawable/up"
+                android:onClick="onUp" />
+
+            <ImageButton
+                android:id="@+id/downButton"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_below="@id/editText"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/webView"
+                android:background="@drawable/down"
+                android:onClick="onDown" />
+
+            <ImageButton
+                android:id="@+id/deleteButton"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_below="@+id/editText"
+                android:layout_marginLeft="30dp"
+                android:layout_toRightOf="@+id/downButton"
+                android:background="@drawable/minus" />
+
+            <CheckBox
+                android:id="@+id/kbCheckbox"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_below="@id/addButton"
+                android:layout_marginRight="34dp"
+                android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@+id/upButton"
+                android:onClick="onCheckboxClicked" />
+            <!--<ImageButton-->
+            <!--android:id="@+id/onButton"-->
+            <!--android:layout_width="25dp"-->
+            <!--android:layout_height="25dp"-->
+            <!--android:layout_below="@id/addButton"-->
+            <!--android:layout_marginRight="30dp"-->
+            <!--android:layout_toLeftOf="@+id/upButton"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:background="@drawable/on" />-->
+
+            <ImageButton
+                android:id="@+id/goButton"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_below="@id/upButton"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@+id/webView"
                 android:background="@drawable/play" />
 
             <ImageButton
                 android:id="@+id/replayButton"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_below="@id/editText"
-                android:layout_toRightOf="@+id/webView"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_below="@id/downButton"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/webView"
                 android:background="@drawable/replay" />
 
-            <ImageButton
-                android:id="@+id/deleteButton"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_below="@+id/editText"
-                android:layout_marginLeft="30dp"
-                android:layout_toRightOf="@+id/replayButton"
-                android:background="@drawable/minus" />
+            <!--<ImageButton-->
+            <!--android:id="@+id/offButton"-->
+            <!--android:layout_width="25dp"-->
+            <!--android:layout_height="25dp"-->
+            <!--android:layout_below="@+id/deleteButton"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_marginLeft="30dp"-->
+            <!--android:layout_toRightOf="@+id/replayButton"-->
+            <!--android:background="@drawable/off" />-->
 
             <WebView
                 android:id="@+id/webView"
@@ -76,8 +127,8 @@
 
             <ImageButton
                 android:id="@+id/listButton"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignBottom="@+id/webView"
                 android:layout_marginRight="30dp"
                 android:layout_toLeftOf="@+id/prevButton"
@@ -85,26 +136,26 @@
 
             <ImageButton
                 android:id="@+id/prevButton"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignBottom="@+id/webView"
-                android:layout_toLeftOf="@+id/webView"
                 android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/webView"
                 android:background="@drawable/left" />
 
             <ImageButton
                 android:id="@+id/nextButton"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignBottom="@+id/webView"
-                android:layout_toRightOf="@+id/webView"
                 android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/webView"
                 android:background="@drawable/right" />
 
             <ImageButton
                 android:id="@+id/resetButton"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignBottom="@+id/webView"
                 android:layout_marginLeft="30dp"
                 android:layout_toRightOf="@+id/nextButton"
