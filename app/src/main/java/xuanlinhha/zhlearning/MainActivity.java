@@ -69,6 +69,18 @@ public class MainActivity extends AppCompatActivity {
 
         // views
         editText = (EditText) findViewById(R.id.editText);
+        editText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.onTouchEvent(event);
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+                return true;
+            }
+        });
+
         goButton = findViewById(R.id.goButton);
         replayButton = findViewById(R.id.replayButton);
         webView = findViewById(R.id.webView);
@@ -317,7 +329,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onCheckboxClicked(View view) {
         this.kbEnable = ((CheckBox) view).isChecked();
-        this.kbEnable = !this.kbEnable;
         if (this.kbEnable) {
             editText.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -325,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
                     v.onTouchEvent(event);
                     InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (imm != null) {
-                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 1);
                     }
                     return true;
                 }
@@ -337,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
                     v.onTouchEvent(event);
                     InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (imm != null) {
-                        imm.hideSoftInputFromWindow(v.getWindowToken(), 1);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     }
                     return true;
                 }
